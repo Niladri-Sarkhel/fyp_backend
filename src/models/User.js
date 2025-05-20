@@ -1,14 +1,8 @@
 import mongoose, { Document, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 
-export interface IUser extends Document {
-  name: string;
-  email: string;
-  password: string;
-  comparePassword: (enteredPassword: string) => boolean;
-}
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -33,7 +27,7 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-userSchema.methods.comparePassword = async function (enteredPassword: string) {
+userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { generateToken, clearToken } from "../utils/auth";
 
-const registerUser = async (req: Request, res: Response) => {
+const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
   const userExists = await User.findOne({ email });
 
@@ -28,7 +28,7 @@ const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-const authenticateUser = async (req: Request, res: Response) => {
+const authenticateUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -44,7 +44,7 @@ const authenticateUser = async (req: Request, res: Response) => {
   }
 };
 
-const logoutUser = (req: Request, res: Response) => {
+const logoutUser = (req, res) => {
   clearToken(res);
   res.status(200).json({ message: "User logged out" });
 };
