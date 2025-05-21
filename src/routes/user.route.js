@@ -26,38 +26,38 @@ userRouter
     }
     console.log("Received prompt:", prompt);
 
-    await delay();
+    // await delay();
 
-    /*     res.json({
-      message: `The prompt: "${prompt}" received successfully.`,
-    }); */
-    const iamgePath =
-      "C:/Dev/final_year_project/backend/fyp_backend/public/pizza.jpeg";
-    res.sendFile(iamgePath);
+    // const iamgepath =
+    //   "c:/dev/final_year_project/backend/fyp_backend/public/pizza.jpeg";
+    // res.sendfile(iamgepath);
 
-    // try {
-    //   const imageResponse = await fetch("http://127.0.0.1:5000/generate", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       prompt: req.body.prompt,
-    //     }),
-    //   });
+    try {
+      const imageResponse = await fetch("http://127.0.0.1:5000/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: prompt,
+        }),
+      });
 
-    //   if (!imageResponse.ok) {
-    //     return res.status(500).send("Failed to fetch image from Python server");
-    //   }
-    //   // Read response as buffer
-    //   const imageBuffer = await imageResponse.arrayBuffer();
-    //   const buffer = Buffer.from(imageBuffer);
+      if (!imageResponse.ok) {
+        return res.status(500).send("Failed to fetch image from Python server");
+      }
+      // Read response as buffer
+      const imageBuffer = await imageResponse.arrayBuffer();
+      const buffer = Buffer.from(imageBuffer);
 
-    //   res.setHeader("Content-Type", imageResponse.headers.get("Content-Type"));
-    //   res.send(buffer);
-    // } catch (error) {
-    //   console.error("Error proxying image:", error);
-    //   res.status(500).send("Internal server error");
-    // }
+      res.setHeader(
+        "Content-Type",
+        imageResponse.headers.get("Content-Type") || "image/jpeg"
+      );
+      res.send(buffer);
+    } catch (error) {
+      console.error("Error proxying image:", error);
+      res.status(500).send("Internal server error");
+    }
   });
 export default userRouter;
